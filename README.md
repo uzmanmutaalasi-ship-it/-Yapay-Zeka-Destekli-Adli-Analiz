@@ -1,3 +1,43 @@
+# ⚡ Yapay Zeka Destekli Adli Analiz – AI-Bilirkişi
+
+**AI-Bilirkişi**, kaçak elektrik davalarında bilirkişilere, avukatlara ve enerji hukuku uzmanlarına yardımcı olmak için geliştirilmiş **interaktif bir web aracıdır**.  
+EPK 6446 (Elektrik Piyasası Kanunu) ile TCK 141/142, 163, 203 maddelerini ve Yargıtay’ın yerleşik içtihatlarını bir araya getirir; kullanıcıyı adım adım doğru hukuki nitelendirmeye götürür.
+
+🔗 **Canlı Demo:** *GitHub Pages aktif olduğunda buraya bağlantınız gelecektir.*  
+
+---
+
+## ✨ Öne Çıkan Özellikler
+
+| Özellik | Açıklama |
+|---------|----------|
+| ⚖️ **Suç Vasfı Analizörü** | Abone durumu ve sayaç müdahalesi sorularına verilen yanıtlarla TCK maddesini önerir. |
+| 📚 **Yasal Çerçeve & İçtihatlar** | EPK 6446 ve TCK maddelerinin özetleri, Yargıtay karar yönelimleri tek tıkla erişilebilir. |
+| 📊 **Karşılaştırmalı Radar Grafiği** | Kanun maddelerinin odaklandığı hukuki kavramları görselleştirir. |
+| 🎯 **Bağımsız Bilirkişi Notu** | “Suçludur” gibi kesin ifadelerden kaçınılması gerektiğini hatırlatan P3 protokolü vurgusu. |
+
+## 🛡️ Yapay Zeka Protokolleri (P1 – P3)
+
+| Protokol | Açıklama |
+|----------|----------|
+| **P1 – KVKK Uyumu** | Kişisel veri (TC kimlik, isim, adres vb.) tespitinde anonimleştirme uyarısı yapar. |
+| **P2 – Hallüsinasyon Engelleme** | Kaynaksız mevzuat/içtihat üretmez; her çıktısında resmî kaynaklardan (mevzuat.gov.tr, Yargıtay Karar Arama) teyit edilmesi gerektiğini hatırlatır. |
+| **P3 – Uzman Üslubu** | “Suçludur” yerine “veriler… ihtimalini kuvvetle desteklemektedir” gibi olasılık ve kanıta dayalı dil kullanır. |
+
+## 🧪 Nasıl Kullanılır?
+
+1. **Suç Vasfı Analizörü** ile başlayın:  
+   - *Geçerli bir abone sözleşmesi var mı?*  
+   - *Sayaca fiziksel müdahale tespit edildi mi?*  
+   - Soruları yanıtlayın, sistem size olası TCK maddesini gösterecektir.
+2. **Yasal Çerçeve** sekmesinden EPK 6446 ve TCK maddelerinin özetlerini okuyun.
+3. **Yargıtay İçtihatları** sekmesinden daire görüşlerini ve emsal kararları inceleyin.
+4. Raporunuzu hazırlarken **Bilirkişi Değerlendirme Notu**’ndaki uyarılara mutlaka uyun.
+5. **KVKK** ve **hallüsinasyon** uyarılarını dikkate alarak resmî kaynaklardan teyit yapın.
+
+## 📁 Dosya Yapısı
+├── index.html # Ana uygulama dosyası (Tailwind CSS, Chart.js, Font Awesome)
+└── README.md # Bu dosya
 
 - Tüm kod tek dosyadadır; bağımlılıklar harici CDN’lerden gelir.
 - İnternet bağlantısı yalnızca kütüphaneleri yüklemek için gereklidir (Local’de de çalışır).
