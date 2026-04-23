@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Kaçak Elektrik Davaları - İnteraktif Mevzuat ve İçtihat Analizi | AI-Bilirkişi</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        legal: { 50: '#f0f4f8', 100: '#d9e2ec', 500: '#334e68', 700: '#243b53', 900: '#102a43' },
+                        accent: { 500: '#d97706' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 350px; max-height: 400px; }
+        @media (max-width: 640px) { .chart-container { height: 250px; } }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .interactive-card { transition: all 0.2s ease-in-out; }
+        .interactive-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-header { background: linear-gradient(135deg, #011C40 0%, #023859 30%, #26658C 100%); position: relative; overflow: hidden; }
+        .hero-header::before { content: "⚡"; font-size: 8rem; position: absolute; bottom: -2rem; right: -1rem; opacity: 0.1; pointer-events: none; }
+        .header-badge { display: inline-block; background: #A7EBF2; color: #011C40; padding: 0.2rem 1rem; border-radius: 30px; font-size: 0.7rem; font-weight: 700; }
+        .protocol-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(167, 235, 242, 0.2); backdrop-filter: blur(4px); border: 1px solid #A7EBF2; padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.7rem; font-weight: 600; color: #A7EBF2; }
+        .version-tag { background: #54ACBF; padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.7rem; font-weight: bold; color: #011C40; }
+        .libutton { display: inline-flex; align-items: center; justify-content: center; padding: 7px 18px; background-color: #0A66C2; border-radius: 30px; color: white !important; text-decoration: none; font-size: 0.8rem; gap: 6px; }
+        .hashtags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; margin: 1rem 0; }
+        .hashtag { background: #A7EBF240; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.75rem; font-weight: 500; color: #011C40; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- HEADER (Tüm P değerleri ve v1.4) -->
+    <div class="hero-header text-white px-4 py-6 md:py-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <div class="header-badge"><i class="fas fa-bolt mr-1"></i> Yapay Zeka Destekli Adli Analiz</div>
+                <div class="protocol-badge"><i class="fas fa-shield-alt"></i> P1 – KVKK Uyumlu</div>
+                <div class="protocol-badge"><i class="fas fa-brain"></i> P2 – Hallüsinasyon Engelleme</div>
+                <div class="protocol-badge"><i class="fas fa-gavel"></i> P3 – Uzman Üslubu</div>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold">Kaçak elektrik kullanımı <span class="text-[#A7EBF2]">AI-Bilirkişi</span></h1>
+            <div class="flex flex-wrap items-center gap-3 mt-3 text-sm">
+                <i class="fas fa-gavel"></i> <span>Uzman Mütalaası Asistanı</span>
+                <span class="version-tag"><i class="fas fa-code-branch mr-1"></i> v1.4</span>
+                <span class="version-tag">EPK 6446</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col gap-8">
+        
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+            <p class="text-slate-600 leading-relaxed">
+                Bu uygulama, <strong class="text-legal-900">AI-Bilirkişi – Uzman Mütalaası</strong> kapsamında hazırlanan mevzuat ve içtihat analizini interaktif bir formata dönüştürür. 
+                Amacı, karmaşık hukuki nitelendirmeleri (EPK 6446 vs TCK hükümleri) ve Yargıtay'ın yerleşik içtihatlarını, bilirkişiler ve hukukçular için kolayca keşfedilebilir hale getirmektir.
+            </p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left: Decision Tree -->
+            <div class="lg:col-span-1 flex flex-col gap-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-full">
+                    <div class="bg-slate-50 border-b border-slate-200 p-4">
+                        <h2 class="text-lg font-bold text-legal-900 flex items-center gap-2">⚖️ Suç Vasfı Analizörü</h2>
+                        <p class="text-xs text-slate-500">Yargıtay İçtihatlarına Göre Hukuki Nitelendirme Testi</p>
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col justify-center" id="decision-tree-container"></div>
+                    <div class="bg-slate-50 p-3 border-t border-slate-200 text-center">
+                        <button id="btn-reset-tree" class="text-sm font-medium text-legal-700 hover:text-legal-900 transition-colors hidden">&#8634; Analizi Başa Sar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Tabs -->
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-[500px]">
+                <div class="flex border-b border-slate-200 bg-slate-50">
+                    <button class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-legal-900 border-b-2 border-legal-700 bg-white" data-target="tab-mevzuat">📘 Yasal Çerçeve (Mevzuat)</button>
+                    <button class="tab-btn flex-1 py-3 px-4 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-legal-700" data-target="tab-ictihat">🏛️ Yargıtay İçtihatları</button>
+                </div>
+                <div id="tab-mevzuat" class="tab-content p-5 overflow-y-auto custom-scrollbar flex-grow">
+                    <div class="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-800"><strong>Lex Specialis İlkesi:</strong> 6446 Sayılı Elektrik Piyasası Kanunu (EPK) önceliklidir.</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="mevzuat-grid"></div>
+                </div>
+                <div id="tab-ictihat" class="tab-content p-5 overflow-y-auto custom-scrollbar flex-grow hidden">
+                    <p class="text-sm text-slate-600 mb-4">Yargıtay 2., 11. ve 17. Ceza Daireleri'nin yerleşik görüşleri:</p>
+                    <div class="flex flex-col gap-3" id="ictihat-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                <h2 class="text-lg font-bold text-legal-900 text-center mb-2">📊 Kanunların Uygulama Kapsamları</h2>
+                <div class="chart-container"><canvas id="legalRadarChart"></canvas></div>
+            </div>
+            <div class="bg-amber-50 border-l-4 border-accent-500 rounded-r-xl shadow-sm p-6 relative">
+                <div class="absolute -right-4 -bottom-10 text-9xl text-amber-500 opacity-5">!</div>
+                <div class="flex items-center gap-3 mb-4 relative z-10">
+                    <div class="bg-accent-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">!</div>
+                    <h2 class="text-xl font-bold text-amber-900">Kıdemli Bilirkişi Değerlendirme Notu</h2>
+                </div>
+                <p class="text-amber-900/80 text-sm md:text-base">Teknik rapor tanzim edilirken eylem sadece <strong>teknik bulgular</strong> üzerinden raporlanmalıdır.</p>
+                <ul class="list-disc pl-5 mt-2 text-amber-900/80 text-sm">
+                    <li>Bağlantı tipi (kanca, direkt hat)</li>
+                    <li>Anomali yüzdesi (kurulu güç / fiili tüketim sapması)</li>
+                    <li>Mühür durumu (kopuk, müdahaleli)</li>
+                </ul>
+                <p class="mt-4 p-3 bg-white/60 rounded-lg border border-amber-200 font-semibold text-amber-900 text-sm">⚠️ P3 Protokolü: "Suçludur" gibi kesin ifadelerden kaçınılmalı, nihai takdir mahkemeye aittir.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="hashtags">
+                <span class="hashtag">#KaçakElektrik</span>
+                <span class="hashtag">#AIBilirkişi</span>
+                <span class="hashtag">#UzmanMütalaası</span>
+                <span class="hashtag">#EPK6446</span>
+                <span class="hashtag">#TCK163</span>
+                <span class="hashtag">#Yargıtayİçtihat</span>
+                <span class="hashtag">#LegalTech</span>
+                <span class="hashtag">#KVKKUyumlu</span>
+            </div>
+            <p class="text-slate-700 text-sm font-medium">Kaçak elektrik kullanımı AI-Bilirkişi – Uzman Mütalaası</p>
+            <p class="text-slate-500 text-xs mt-1">Tüm hakları saklıdır. Bilirkişi nihai sorumludur.</p>
+            <div class="mt-4">
+                <a class="libutton" href="https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7452784959968190464" target="_blank">
+                    🔗 LinkedIn’de Abone Olun
+                </a>
+            </div>
+            <p class="text-slate-400 text-xs mt-4">Hazırlayan: AI-Bilirkişi İş Akışı (Uzman Mütalaası) | v1.4</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- MEVZUAT VE İÇTİHAT VERİLERİ ---
+        const mevzuatData = [
+            { kanun: "EPK 6446", madde: "Madde 36", baslik: "Kaçak Elektrik", aciklama: "Ölçüm noktası öncesi bağlantı veya sayaç müdahalesi. Özel Kanun.", renk: "border-blue-500", bg: "bg-blue-50" },
+            { kanun: "TCK 5237", madde: "Madde 163", baslik: "Karşılıksız Yararlanma", aciklama: "Abone var, sayaç manipüle edilmişse.", renk: "border-emerald-500", bg: "bg-emerald-50" },
+            { kanun: "TCK 5237", madde: "Madde 141-142", baslik: "Hırsızlık", aciklama: "Abone yok, doğrudan hat çekilmesi.", renk: "border-red-500", bg: "bg-red-50" },
+            { kanun: "TCK 5237", madde: "Madde 203", baslik: "Mühür Bozma", aciklama: "Mühür müdahalesi, fikri içtima.", renk: "border-purple-500", bg: "bg-purple-50" }
+        ];
+        const ictihatData = [
+            { baslik: "30.03.2013 Miladı", ikon: "🗓️", detay: "EPK 6446 öncelikli uygulama." },
+            { baslik: "Suç Vasfı Ayrımı", ikon: "⚖️", detay: "Abonesiz direkt hat → TCK 141; aboneli sayaç müdahalesi → TCK 163." },
+            { baslik: "Teknik Arıza Karinesi", ikon: "⚙️", detay: "Her düşüş kaçak değildir, kast aranır." },
+            { baslik: "Az Değer İndirimi", ikon: "📉", detay: "TCK 145 uygulanabilir." }
+        ];
+
+        // --- TAB NAVIGATION ---
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('border-legal-700', 'text-legal-900', 'bg-white', 'font-semibold');
+                    b.classList.add('border-transparent', 'text-slate-500', 'font-medium');
+                });
+                btn.classList.remove('border-transparent', 'text-slate-500', 'font-medium');
+                btn.classList.add('border-legal-700', 'text-legal-900', 'bg-white', 'font-semibold');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                document.getElementById(btn.dataset.target).classList.remove('hidden');
+                document.getElementById(btn.dataset.target).classList.add('fade-in');
+            });
+        });
+
+        // --- MEVZUAT GRID'İ DOLDUR ---
+        const grid = document.getElementById('mevzuat-grid');
+        mevzuatData.forEach(i => {
+            let div = document.createElement('div');
+            div.className = `interactive-card border-l-4 ${i.renk} ${i.bg} p-4 rounded-r-lg`;
+            div.innerHTML = `<div class="flex justify-between"><span class="text-xs font-bold">${i.kanun}</span><span class="bg-white px-2 py-0.5 rounded text-xs">${i.madde}</span></div><h3 class="font-bold mt-1">${i.baslik}</h3><p class="text-sm">${i.aciklama}</p>`;
+            grid.appendChild(div);
+        });
+
+        // --- İÇTİHAT LİSTESİNİ DOLDUR ---
+        const ilist = document.getElementById('ictihat-list');
+        ictihatData.forEach(i => {
+            let div = document.createElement('div');
+            div.className = "interactive-card bg-white border border-slate-200 rounded-lg p-4 flex gap-4 items-start";
+            div.innerHTML = `<div class="text-2xl bg-slate-50 rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">${i.ikon}</div><div><h4 class="font-bold text-legal-900">${i.baslik}</h4><p class="text-sm text-slate-600 mt-1">${i.detay}</p></div>`;
+            ilist.appendChild(div);
+        });
+
+        // --- KARAR AĞACI ---
+        const treeContainer = document.getElementById('decision-tree-container');
+        const resetBtn = document.getElementById('btn-reset-tree');
+        const treeNodes = {
+            0: { question: "Geçerli abone sözleşmesi var mı?", options: [{ text: "Evet, abone var", next: 1 }, { text: "Hayır, abone yok", next: 2 }] },
+            1: { question: "Sayaca fiziksel müdahale var mı?", options: [{ text: "Evet, var", result: "TCK 163 + EPK 36" }, { text: "Hayır, teknik arıza/düşüş var", result: "Suç Kastı Yok (Teknik Arıza Karinesi)" }] },
+            2: { question: "Doğrudan hat çekilmiş mi?", options: [{ text: "Evet", next: 3 }, { text: "Hayır", result: "Yetersiz bulgu - ek inceleme gerekir" }] },
+            3: { question: "Mühür bozulmuş mu?", options: [{ text: "Evet", result: "TCK 141/142 + TCK 203 (Fikri İçtima)" }, { text: "Hayır", result: "TCK 141/142 (Hırsızlık) + EPK 36" }] }
+        };
+        function renderTreeNode(step) {
+            treeContainer.innerHTML = '';
+            const node = treeNodes[step];
+            if (!node) return;
+            let q = document.createElement('h3');
+            q.className = "text-lg font-medium text-center mb-4 leading-relaxed"; q.innerHTML = `🤔<br>${node.question}`;
+            treeContainer.appendChild(q);
+            let btnDiv = document.createElement('div'); btnDiv.className = "flex flex-col gap-2";
+            node.options.forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = "bg-white border-2 border-slate-200 p-2 rounded-lg text-sm hover:border-legal-500 hover:bg-slate-50 transition-all"; btn.innerText = opt.text;
+                btn.onclick = () => { if (opt.result) showResult(opt.result); else if (opt.next !== undefined) renderTreeNode(opt.next); };
+                btnDiv.appendChild(btn);
+            });
+            treeContainer.appendChild(btnDiv);
+            resetBtn.classList.remove('hidden');
+        }
+        function showResult(res) {
+            treeContainer.innerHTML = `<div class="text-center"><div class="text-4xl mb-2">⚖️</div><div class="bg-legal-900 text-white p-3 rounded-lg font-semibold">${res}</div><p class="text-xs text-slate-400 mt-2">P2 uyarınca Yargıtay içtihadına dayanır. Resmî kaynaklardan teyit ediniz.</p></div>`;
+        }
+        resetBtn.onclick = () => { renderTreeNode(0); resetBtn.classList.add('hidden'); };
+        renderTreeNode(0);
+
+        // --- RADAR CHART ---
+        const ctx = document.getElementById('legalRadarChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Sözleşme İhlali', 'Teknik Müdahale', 'Mülkiyet İhlali', 'Kamu Otoritesi'],
+                datasets: [
+                    { label: 'EPK 36', data: [50,100,50,20], backgroundColor: 'rgba(59,130,246,0.2)', borderColor: 'rgb(59,130,246)', pointBackgroundColor: 'rgb(59,130,246)' },
+                    { label: 'TCK 163', data: [100,80,20,10], backgroundColor: 'rgba(16,185,129,0.2)', borderColor: 'rgb(16,185,129)', pointBackgroundColor: 'rgb(16,185,129)' },
+                    { label: 'TCK 141/142', data: [10,60,100,10], backgroundColor: 'rgba(239,68,68,0.2)', borderColor: 'rgb(239,68,68)', pointBackgroundColor: 'rgb(239,68,68)' },
+                    { label: 'TCK 203', data: [10,40,10,100], backgroundColor: 'rgba(168,85,247,0.2)', borderColor: 'rgb(168,85,247)', pointBackgroundColor: 'rgb(168,85,247)' }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { r: { ticks: { display: false }, pointLabels: { font: { size: 10 } } } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } }
+        });
+    </script>
+</body>
+</html>
